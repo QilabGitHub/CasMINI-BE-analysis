@@ -269,7 +269,6 @@ def main():
                     command = f"{docker_stem} CRISPResso --fastq_r1 {fname} --amplicon_seq {amplicon} --guide_seq {guide} -w {wing_length} -wc {center} --plot_window_size {wing_length} -n {sample} {boilerplate}"
                     print(command)
                     os.system(command)
-        break
     
     indel_size_plot()
     deletion_pos_plot()
