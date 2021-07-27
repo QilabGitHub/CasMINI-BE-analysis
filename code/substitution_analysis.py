@@ -64,6 +64,7 @@ def regenerate_log(sample_metadata):
                 ref_reassembled = ''.join([r for r, n in zipped])
                 guide_idx = ref_reassembled.find(guide)
                 left_idx = guide_idx - 4
+                left_idx = guide_idx
                 right_idx = guide_idx + len(guide)
 
                 zipped = zipped[left_idx: right_idx]
