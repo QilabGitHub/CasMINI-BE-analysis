@@ -144,6 +144,7 @@ def indel_size_plot():
 
 def regenerate_log(sample_metadata):
     all_sample_data = []
+    sample_names = [dat["sample"] for dat in sample_metadata]
 
     for sample_name in sample_names:
         fnames = glob.glob(f"{OUTPUT_DIR}/*_{sample_name}/Alleles_frequency_table_around_sgRNA_*.txt")
@@ -190,7 +191,7 @@ def regenerate_log(sample_metadata):
         all_sample_data.append(final_dat)
 
     if len(all_sample_data) == 0: return
-    df = pd.sample_metadataFrame.from_records(all_sample_data)
+    df = pd.DataFrame.from_records(all_sample_data)
     df = df.sort_values(by="sample")
     new_columns = ["sample"] + [f"{ref}->{new}" for ref in ["A", "T", "C", "G"] for new in ["A", "T", "C", "G"]] + ["insertions", "deletions", "insertions_or_deletions", "any_modification"]
     new_columns = [col for col in new_columns if col in df.columns]
@@ -268,6 +269,7 @@ def main():
                     command = f"{docker_stem} CRISPResso --fastq_r1 {fname} --amplicon_seq {amplicon} --guide_seq {guide} -w {wing_length} -wc {center} --plot_window_size {wing_length} -n {sample} {boilerplate}"
                     print(command)
                     os.system(command)
+        break
     
     indel_size_plot()
     deletion_pos_plot()

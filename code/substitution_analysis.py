@@ -82,7 +82,7 @@ def regenerate_log(sample_metadata):
                     sample_data[substitution_type] += num_reads
 
 
-        final_dat = {"sample": sample}
+        final_dat = {"sample": sample, "total_reads": tot_reads}
         for modification_type, read_count in sample_data.items():
             final_dat[modification_type] = read_count
         all_data.append(final_dat)
@@ -90,7 +90,7 @@ def regenerate_log(sample_metadata):
     if len(all_data) == 0: return
     df = pd.DataFrame.from_records(all_data)
     df = df.sort_values(by="sample")
-    new_columns = ["sample", f"{CONVERSION_NUC_FROM}->{CONVERSION_NUC_TO}"] + [f"{CONVERSION_NUC_FROM}{idx}->{CONVERSION_NUC_TO}" for idx in range(1, 29)]
+    new_columns = ["sample", "total_reads", f"{CONVERSION_NUC_FROM}->{CONVERSION_NUC_TO}"] + [f"{CONVERSION_NUC_FROM}{idx}->{CONVERSION_NUC_TO}" for idx in range(1, 29)]
     new_columns = [col for col in new_columns if col in df.columns]
     df = df[new_columns]
     df.to_excel(f"{OUTPUT_DIR}/substitution_readcounts_summary.xlsx", index=False)
@@ -166,6 +166,7 @@ def main():
                     command = f"{docker_stem} CRISPResso --fastq_r1 {fname} --amplicon_seq {amplicon} --guide_seq {guide} -w {wing_length} -wc {center} --plot_window_size {wing_length} -n {sample} {boilerplate}"
                     print(command)
                     os.system(command)
+        break
 
 
 if __name__=="__main__":
